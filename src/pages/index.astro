@@ -54,17 +54,16 @@ const posts = (await getCollection("blog")).sort(
 				display: block;
 			}
 			.title {
-				margin: 0 0 0.4rem 0; /* FIXED: Added bottom margin for breathing room */
+				margin: 0 0 0.4rem 0;
 				color: rgb(var(--black));
-				line-height: 1.2; /* FIXED: Increased line-height for multi-line titles */
+				line-height: 1.2;
 			}
 			.date {
 				margin: 0;
 				color: rgb(var(--gray));
 			}
-			/* FIXED: Removed rgb() wrapper from var(--accent) */
-			ul li a:hover h4,
-			ul li a:hover .date {
+			/* FIXED: Now only the title highlights on hover, not the date */
+			ul li a:hover h4 {
 				color: var(--accent);
 			}
 			ul a:hover img {
