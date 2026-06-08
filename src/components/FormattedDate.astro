@@ -4,14 +4,31 @@ interface Props {
 }
 
 const { date } = Astro.props;
+
+// Helper function to add the correct 'st', 'nd', 'rd', or 'th' suffix to the day
+function getOrdinalSuffix(day: number) {
+	if (day > 3 && day < 21) return "th";
+	switch (day % 10) {
+		case 1:
+			return "st";
+		case 2:
+			return "nd";
+		case 3:
+			return "rd";
+		default:
+			return "th";
+	}
+}
+
+// Extract the pieces
+const day = date.getDate();
+const month = date.toLocaleDateString("en-GB", { month: "long" });
+const year = date.getFullYear();
+
+// Piece them together into your requested format
+const formattedDate = `${day}${getOrdinalSuffix(day)} ${month}, ${year}`;
 ---
 
 <time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
+	{formattedDate}
 </time>

@@ -54,9 +54,9 @@ const posts = (await getCollection("blog")).sort(
 				display: block;
 			}
 			.title {
-				margin: 0;
+				margin: 0 0 0.4rem 0; /* FIXED: Added bottom margin for breathing room */
 				color: rgb(var(--black));
-				line-height: 1;
+				line-height: 1.2; /* FIXED: Increased line-height for multi-line titles */
 			}
 			.date {
 				margin: 0;

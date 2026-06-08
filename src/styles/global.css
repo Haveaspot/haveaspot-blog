@@ -10,7 +10,7 @@
 	--accent-dark: #0E491F;
 	/* Dark Green */
 	--black: 2, 19, 0;
-	/* Haveaspot Black (#021300) in RGB format */
+	/* RGB values for #021300 */
 	--gray: 107, 114, 128;
 	--gray-light: 243, 244, 246;
 	--gray-dark: 31, 41, 55;
@@ -25,10 +25,16 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background-color: #fafafa;
+	background-color: #ffffff;
+	/* FIXED: Changed from #fafafa to pure white */
 	color: rgb(var(--black));
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+}
+
+/* Ensures any SVG icons in the main body inherit the dark color */
+svg {
+	color: rgb(var(--black));
 }
 
 main {
@@ -73,9 +79,10 @@ h5 {
 strong,
 b {
 	font-weight: 700;
+	color: rgb(var(--black));
 }
 
-/* FIXED: Links now perfectly match the header hover color */
+/* Links default to green */
 a {
 	color: var(--accent);
 	text-decoration: none;
@@ -85,6 +92,26 @@ a {
 a:hover {
 	color: var(--accent);
 	text-decoration: underline;
+}
+
+/* Explicit fallback to ensure linked titles remain dark black/green, hovering to bright green */
+a h1,
+a h2,
+a h3,
+a h4,
+a h5,
+a h6 {
+	color: rgb(var(--black));
+	transition: color 0.2s ease;
+}
+
+a:hover h1,
+a:hover h2,
+a:hover h3,
+a:hover h4,
+a:hover h5,
+a:hover h6 {
+	color: var(--accent);
 }
 
 p {
@@ -99,10 +126,12 @@ textarea,
 input {
 	width: 100%;
 	font-size: 16px;
+	color: rgb(var(--black));
 }
 
 table {
 	width: 100%;
+	color: rgb(var(--black));
 }
 
 img {
@@ -115,6 +144,7 @@ code {
 	padding: 2px 5px;
 	background-color: rgb(var(--gray-light));
 	border-radius: 2px;
+	color: rgb(var(--black));
 }
 
 pre {
@@ -131,6 +161,7 @@ blockquote {
 	padding: 0 0 0 20px;
 	margin: 0;
 	font-size: 1.333em;
+	color: rgb(var(--black));
 }
 
 hr {
