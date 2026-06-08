@@ -1,85 +1,310 @@
 ---
-import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+import logo from "../assets/logo.webp";
+
+// ==========================================
+// EASY EDIT VARIABLES
+// Update your links and profile image here!
+// ==========================================
+const urls = {
+	home: "https://haveaspot.com/",
+	venues: "/venues",
+	about: "/about",
+	contact: "https://haveaspot.com/contact/",
+	knowledgeBase: "https://support.haveaspot.com/",
+};
+
+const profileImage =
+	"https://ui-avatars.com/api/?name=TV&background=0aad0a&color=fff&rounded=true&size=120";
+const profileLink = "#";
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+<header class="has-header">
+	<div class="has-header-inner">
+		<a href="/" class="has-logo-link">
+			<img src={logo.src} alt="Haveaspot Logo" class="has-logo-img" />
+		</a>
+
+		<div class="has-right-section">
+			<button
+				id="mobile-menu-btn"
+				class="mobile-toggle"
+				aria-label="Open Menu"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<line x1="3" y1="12" x2="21" y2="12"></line>
+					<line x1="3" y1="6" x2="21" y2="6"></line>
+					<line x1="3" y1="18" x2="21" y2="18"></line>
+				</svg>
+			</button>
+
+			<nav id="mobile-nav" class="has-nav">
+				<a href={urls.home}>Home</a>
+				<a href={urls.venues}>Venues</a>
+				<a href={urls.about}>About</a>
+			</nav>
+
+			<div class="has-divider"></div>
+
+			<div class="has-icons">
+				<a href={urls.contact} aria-label="Contact Us">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<rect width="20" height="16" x="2" y="4" rx="2"></rect>
+						<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+						></path>
+					</svg>
+				</a>
+
+				<a href={urls.knowledgeBase} aria-label="Knowledge Base">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
+						></path>
+						<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+						></path>
+					</svg>
+				</a>
+
+				<a href={profileLink} class="has-avatar" aria-label="Profile">
+					<img src={profileImage} alt="User Avatar" />
+				</a>
+			</div>
 		</div>
-		<div class="social-links">
-			<a href="https://m.webtoo.ls/@astro" target="_blank">
-				<span class="sr-only">Follow Astro on Mastodon</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
-					></path></svg
-				>
-			</a>
-			<a href="https://twitter.com/astrodotbuild" target="_blank">
-				<span class="sr-only">Follow Astro on Twitter</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
-					></path></svg
-				>
-			</a>
-			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
-			</a>
-		</div>
-	</nav>
+	</div>
 </header>
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
+
+<style is:global>
+	/* Base Structure */
+	.has-header {
+		width: 100% !important;
+		background-color: #ffffff !important;
+		border-bottom: 1px solid #e5e7eb !important;
+		font-family: "Poppins", system-ui, sans-serif !important;
+		display: block !important;
+		position: relative !important;
+		z-index: 100 !important;
 	}
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+	.has-header-inner {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		max-width: 1400px !important;
+		margin: 0 auto !important;
+		padding: 0 2rem !important;
+		height: 72px !important;
+		box-sizing: border-box !important;
 	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+
+	.has-logo-link {
+		display: flex !important;
+		align-items: center !important;
+		text-decoration: none !important;
+		height: 100% !important;
+		overflow: visible !important;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
+
+	.has-logo-img {
+		height: 35px !important;
+		width: auto !important;
+		max-width: none !important;
+		display: block !important;
+		object-fit: contain !important;
+		margin: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+		background: transparent !important;
+		overflow: visible !important;
+		padding: 2px 0 !important;
 	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
+
+	.has-right-section {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		height: 100% !important;
 	}
-	.social-links,
-	.social-links a {
-		display: flex;
+
+	/* Mobile Toggle Hidden on Desktop */
+	.mobile-toggle {
+		display: none !important;
+		background: transparent !important;
+		border: none !important;
+		color: #1f2937 !important;
+		cursor: pointer !important;
+		padding: 0.5rem !important;
+		margin-right: 0.5rem !important;
 	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
+
+	.has-nav {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		gap: 2rem !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.has-nav a {
+		color: #1f2937 !important;
+		text-decoration: none !important;
+		font-size: 0.95rem !important;
+		font-weight: 500 !important;
+		display: block !important;
+		transition: color 0.2s ease !important;
+	}
+
+	.has-nav a:hover {
+		color: #0aad0a !important;
+	}
+
+	.has-divider {
+		width: 1px !important;
+		height: 24px !important;
+		background-color: #e5e7eb !important;
+		margin: 0 1.5rem !important;
+		display: block !important;
+	}
+
+	.has-icons {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		gap: 1.25rem !important;
+	}
+
+	.has-icons a {
+		color: #1f2937 !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-decoration: none !important;
+		transition:
+			color 0.2s ease,
+			transform 0.2s ease !important;
+	}
+
+	.has-icons a:hover {
+		color: #0aad0a !important;
+		transform: translateY(-1px) !important;
+	}
+
+	.has-icons svg {
+		width: 20px !important;
+		height: 20px !important;
+		display: block !important;
+	}
+
+	.has-avatar {
+		display: block !important;
+		margin-left: 0.5rem !important;
+	}
+
+	.has-avatar img {
+		width: 36px !important;
+		height: 36px !important;
+		border-radius: 50% !important;
+		object-fit: cover !important;
+		border: 2px solid transparent !important;
+		margin: 0 !important;
+		max-width: none !important;
+		transition: border-color 0.2s ease !important;
+	}
+
+	.has-avatar:hover img {
+		border-color: #0aad0a !important;
+	}
+
+	/* MOBILE LAYOUT OVERRIDES */
+	@media (max-width: 768px) {
+		.has-header-inner {
+			padding: 0 1rem !important;
+		}
+
+		.has-divider {
+			display: none !important;
+		}
+
+		.mobile-toggle {
+			display: flex !important;
+			align-items: center !important;
+		}
+
+		.has-icons {
+			gap: 1rem !important;
+		}
+
+		/* Transforms the nav into a hidden dropdown */
+		.has-nav {
+			display: none !important; /* Hidden until toggled */
+			position: absolute !important;
+			top: 73px !important; /* Drops right below the border */
+			left: 0 !important;
+			width: 100% !important;
+			background-color: #ffffff !important;
+			flex-direction: column !important;
+			align-items: flex-start !important;
+			padding: 1.5rem 2rem !important;
+			gap: 1.25rem !important;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+			border-bottom: 1px solid #e5e7eb !important;
+			z-index: 99 !important;
+		}
+
+		.has-nav a {
+			font-size: 1.1rem !important;
+			width: 100% !important;
+		}
+
+		/* The class JavaScript will add when clicked */
+		.has-nav.open {
+			display: flex !important;
 		}
 	}
 </style>
+
+<script>
+	// This tiny script listens for clicks on the hamburger button
+	// and toggles the 'open' class on the navigation menu.
+	function setupMobileMenu() {
+		const btn = document.getElementById("mobile-menu-btn");
+		const nav = document.getElementById("mobile-nav");
+
+		if (btn && nav) {
+			btn.onclick = () => {
+				nav.classList.toggle("open");
+			};
+		}
+	}
+
+	// Runs immediately on page load
+	setupMobileMenu();
+
+	// Ensures it works with Astro's view transitions (if enabled)
+	document.addEventListener("astro:page-load", setupMobileMenu);
+</script>
