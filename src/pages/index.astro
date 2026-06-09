@@ -62,13 +62,43 @@ const posts = (await getCollection("blog")).sort(
 				margin: 0;
 				color: rgb(var(--gray));
 			}
-			/* FIXED: Now only the title highlights on hover, not the date */
 			ul li a:hover h4 {
 				color: var(--accent);
 			}
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+
+			/* Utility class to hide overflow posts initially */
+			.post-hidden {
+				display: none !important;
+			}
+
+			/* Load More Button Styling */
+			.load-more-wrapper {
+				display: flex;
+				justify-content: center;
+				margin-top: 4rem;
+				width: 100%;
+			}
+
+			.btn-load-more {
+				background-color: #021300;
+				color: #ffffff;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 16px;
+				font-weight: 500;
+				padding: 12px 32px;
+				border-radius: 6px;
+				border: none;
+				cursor: pointer;
+				transition: background-color 0.2s ease;
+			}
+
+			.btn-load-more:hover {
+				background-color: #0aad0a;
+			}
+
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -90,11 +120,12 @@ const posts = (await getCollection("blog")).sort(
 		<Header />
 		<main>
 			<section>
-				<ul>
+				<ul id="blog-grid">
 					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
+						posts.map((post, index) => (
+							/* Adds the 'post-hidden' class to any post starting at index 5 (the 6th post) */
+							<li class={index >= 5 ? "post-hidden" : ""}>
+								<a href={`/blog/${post.slug || post.id}/`}>
 									{post.data.heroImage && (
 										<Image
 											width={720}
@@ -114,8 +145,59 @@ const posts = (await getCollection("blog")).sort(
 						))
 					}
 				</ul>
+
+				{
+					/* Only render the button container if there are more than 5 posts in total */
+				}
+				{
+					posts.length > 5 && (
+						<div class="load-more-wrapper" id="load-more-wrapper">
+							<button id="load-more-btn" class="btn-load-more">
+								Load More
+							</button>
+						</div>
+					)
+				}
 			</section>
 		</main>
 		<Footer />
+
+		<script is:inline>
+			function initLoadMore() {
+				const loadMoreBtn = document.getElementById("load-more-btn");
+				const wrapper = document.getElementById("load-more-wrapper");
+
+				if (!loadMoreBtn) return;
+
+				loadMoreBtn.onclick = function () {
+					// Find all posts that are currently hidden
+					const hiddenPosts =
+						document.querySelectorAll(".post-hidden");
+					const batchSize = 4;
+
+					// Loop through and reveal up to 4 posts
+					for (
+						let i = 0;
+						i < batchSize && i < hiddenPosts.length;
+						i++
+					) {
+						hiddenPosts[i].classList.remove("post-hidden");
+					}
+
+					// Check if we just revealed the very last posts. If so, hide the button wrapper
+					const remainingHidden =
+						document.querySelectorAll(".post-hidden");
+					if (remainingHidden.length === 0) {
+						wrapper.style.display = "none";
+					}
+				};
+			}
+
+			// Run on initial page load
+			initLoadMore();
+
+			// Run after Astro View Transitions (if enabled)
+			document.addEventListener("astro:page-load", initLoadMore);
+		</script>
 	</body>
 </html>
