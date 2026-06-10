@@ -19,17 +19,26 @@ const posts = (await getCollection("blog")).sort(
 		<style>
 			main {
 				width: 960px;
+				max-width: calc(100% - 2rem);
+				margin: 0 auto;
 			}
 
-			/* Filter Anchor Context Frame Wrapper */
+			.controls-row {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 2.5rem;
+				width: 100%;
+			}
+
 			.filter-menu-container {
 				position: relative;
 				display: inline-flex;
 				align-items: center;
-				margin-bottom: 3rem;
+				margin: 0;
 			}
 
-			/* Left-aligned Filter Trigger Button */
 			.filter-trigger-btn {
 				display: inline-flex;
 				align-items: center;
@@ -57,12 +66,10 @@ const posts = (await getCollection("blog")).sort(
 				height: 10px;
 				transition: transform 0.2s ease;
 			}
-			/* Rotates the chevron down when active */
 			.filter-trigger-btn.active svg {
 				transform: rotate(90deg);
 			}
 
-			/* Absolute-positioned Floating Pill Strip Panel (Preserved for Mobile) */
 			.filter-dropdown-strip {
 				position: absolute;
 				top: 50%;
@@ -111,6 +118,74 @@ const posts = (await getCollection("blog")).sort(
 				color: #ffffff;
 			}
 
+			.search-wrapper {
+				position: relative;
+				display: inline-flex;
+				align-items: center;
+				max-width: 280px;
+				width: 100%;
+				margin: 0;
+			}
+			.search-input {
+				width: 100%;
+				padding: 7px 16px 7px 36px;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 14px;
+				font-weight: 500;
+				color: #021300;
+				background-color: transparent;
+				border: 1px solid #e5e7eb;
+				border-radius: 20px;
+				outline: none;
+				transition: all 0.2s ease;
+			}
+			.search-input::placeholder {
+				color: #021300;
+				opacity: 1;
+				font-weight: 500;
+			}
+			.search-input:focus {
+				border-color: #0aad0a;
+				box-shadow: 0 0 0 3px rgba(10, 173, 10, 0.08);
+			}
+			.search-icon {
+				position: absolute;
+				left: 14px;
+				color: #021300;
+				width: 15px;
+				height: 15px;
+				pointer-events: none;
+				transition: color 0.2s ease;
+			}
+			.search-input:focus + .search-icon {
+				color: #0aad0a;
+			}
+
+			.no-results-frame {
+				display: none;
+				text-align: center;
+				padding: 5rem 1rem;
+				font-family: "Poppins", system-ui, sans-serif;
+				color: rgb(var(--gray));
+			}
+			.no-results-frame h3 {
+				color: #021300;
+				margin-bottom: 0.5rem;
+				font-size: 1.25rem;
+			}
+			.no-results-frame button {
+				background-color: transparent;
+				border: none;
+				color: #0aad0a;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-weight: 500;
+				text-decoration: underline;
+				cursor: pointer;
+				padding: 0;
+				font-size: 14px;
+				margin-top: 0.5rem;
+			}
+
 			ul {
 				display: flex;
 				flex-wrap: wrap;
@@ -128,7 +203,6 @@ const posts = (await getCollection("blog")).sort(
 				transition: 0.2s ease;
 			}
 
-			/* Featured Dynamic Post Styling */
 			ul li.is-featured {
 				width: 100% !important;
 				margin-bottom: 1rem !important;
@@ -164,9 +238,11 @@ const posts = (await getCollection("blog")).sort(
 				font-family: "Poppins", system-ui, sans-serif;
 				font-size: 14px;
 			}
+
 			ul li a:hover h4 {
-				color: #0aad0a;
+				color: rgb(var(--gray));
 			}
+
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
@@ -208,7 +284,15 @@ const posts = (await getCollection("blog")).sort(
 				ul li.is-featured .title {
 					font-size: 1.563em !important;
 				}
-				/* AMENDED: Removed layout-breaking mobile block overrides so the pill floats elegantly to the right */
+				.controls-row {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 1rem;
+					margin-bottom: 2rem;
+				}
+				.search-wrapper {
+					max-width: 100%;
+				}
 			}
 		</style>
 	</head>
@@ -216,15 +300,53 @@ const posts = (await getCollection("blog")).sort(
 		<Header />
 		<main>
 			<section>
-				<div class="filter-menu-container" id="filter-menu-frame">
-					<button
-						id="filter-menu-trigger"
-						class="filter-trigger-btn"
-						aria-haspopup="true"
-						aria-expanded="false"
-					>
-						Filter
+				<div class="controls-row">
+					<div class="filter-menu-container" id="filter-menu-frame">
+						<button
+							id="filter-menu-trigger"
+							class="filter-trigger-btn"
+							aria-haspopup="true"
+							aria-expanded="false"
+						>
+							Filter
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="3"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<polyline points="9 18 15 12 9 6"></polyline>
+							</svg>
+						</button>
+
+						<div id="filter-dropdown" class="filter-dropdown-strip">
+							<button class="filter-btn active" data-filter="all"
+								>All</button
+							>
+							<button class="filter-btn" data-filter="Articles"
+								>Articles</button
+							>
+							<button
+								class="filter-btn"
+								data-filter="Company News">Company News</button
+							>
+						</div>
+					</div>
+
+					<div class="search-wrapper">
+						<input
+							type="text"
+							id="search-input"
+							class="search-input"
+							placeholder="Search articles..."
+							aria-label="Search articles"
+							autocomplete="off"
+						/>
 						<svg
+							class="search-icon"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="none"
@@ -233,21 +355,20 @@ const posts = (await getCollection("blog")).sort(
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						>
-							<polyline points="9 18 15 12 9 6"></polyline>
+							<circle cx="11" cy="11" r="8"></circle>
+							<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
 						</svg>
-					</button>
-
-					<div id="filter-dropdown" class="filter-dropdown-strip">
-						<button class="filter-btn active" data-filter="all"
-							>All</button
-						>
-						<button class="filter-btn" data-filter="Articles"
-							>Articles</button
-						>
-						<button class="filter-btn" data-filter="Company News"
-							>Company News</button
-						>
 					</div>
+				</div>
+
+				<div id="no-results" class="no-results-frame">
+					<h3>No articles match your search</h3>
+					<p>
+						Try checking your spelling or selecting a different
+						category.
+					</p>
+					<button id="clear-search-btn">Clear search & filters</button
+					>
 				</div>
 
 				<ul id="blog-grid">
@@ -299,22 +420,32 @@ const posts = (await getCollection("blog")).sort(
 
 		<script is:inline>
 			let currentFilter = "all";
+			let searchQuery = "";
 			let visibleCount = 5;
 
 			function updateGridEngine() {
 				const posts = document.querySelectorAll(".blog-post-card");
 				const loadMoreBtnWrapper =
 					document.getElementById("load-more-wrapper");
+				const noResultsBlock = document.getElementById("no-results");
 
 				let matchingPosts = [];
+
 				posts.forEach((post) => {
 					const postCategory =
 						post.getAttribute("data-category") || "Articles";
+					const postTitle = (
+						post.querySelector(".title")?.textContent || ""
+					).toLowerCase();
 
-					if (
+					const passCategory =
 						currentFilter === "all" ||
-						postCategory === currentFilter
-					) {
+						postCategory === currentFilter;
+					const passTextSearch = postTitle.includes(
+						searchQuery.toLowerCase(),
+					);
+
+					if (passCategory && passTextSearch) {
 						matchingPosts.push(post);
 						post.classList.remove("post-hidden");
 					} else {
@@ -335,6 +466,11 @@ const posts = (await getCollection("blog")).sort(
 					}
 				});
 
+				if (noResultsBlock) {
+					noResultsBlock.style.display =
+						matchingPosts.length === 0 ? "block" : "none";
+				}
+
 				if (loadMoreBtnWrapper) {
 					if (matchingPosts.length <= visibleCount) {
 						loadMoreBtnWrapper.style.display = "none";
@@ -350,10 +486,27 @@ const posts = (await getCollection("blog")).sort(
 				const dropdown = document.getElementById("filter-dropdown");
 				const filterButtons = document.querySelectorAll(".filter-btn");
 				const loadMoreBtn = document.getElementById("load-more-btn");
+				const searchInput = document.getElementById("search-input");
+				const clearSearchBtn =
+					document.getElementById("clear-search-btn");
 
 				if (!trigger || !dropdown || !container) return;
 
-				// 1. Toggle Filter Dropdown Menu
+				// NEW: Read the URL to see if a category was passed in
+				const urlParams = new URLSearchParams(window.location.search);
+				const filterParam = urlParams.get("filter");
+				if (filterParam) {
+					currentFilter = filterParam;
+					// Automatically click the corresponding filter button visually
+					filterButtons.forEach((b) => b.classList.remove("active"));
+					const targetBtn = document.querySelector(
+						`[data-filter="${filterParam}"]`,
+					);
+					if (targetBtn) targetBtn.classList.add("active");
+				} else {
+					currentFilter = "all";
+				}
+
 				trigger.onclick = function (e) {
 					e.stopPropagation();
 					const isOpen = dropdown.classList.toggle("open");
@@ -364,7 +517,6 @@ const posts = (await getCollection("blog")).sort(
 					);
 				};
 
-				// 2. Click Outside/Away Close Routine
 				document.onclick = function (e) {
 					if (!container.contains(e.target)) {
 						dropdown.classList.remove("open");
@@ -373,7 +525,6 @@ const posts = (await getCollection("blog")).sort(
 					}
 				};
 
-				// 3. Category Filter Selection Updates
 				filterButtons.forEach((btn) => {
 					btn.onclick = function (e) {
 						e.stopPropagation();
@@ -384,11 +535,51 @@ const posts = (await getCollection("blog")).sort(
 
 						currentFilter = this.getAttribute("data-filter");
 						visibleCount = 5;
+
+						// Clear the URL parameter so it doesn't get stuck if they click a new filter
+						window.history.replaceState(
+							{},
+							"",
+							window.location.pathname,
+						);
+
 						updateGridEngine();
 					};
 				});
 
-				// 4. Pagination Load More Routing
+				if (searchInput) {
+					searchInput.oninput = function () {
+						searchQuery = this.value;
+						visibleCount = 5;
+						updateGridEngine();
+					};
+				}
+
+				if (clearSearchBtn) {
+					clearSearchBtn.onclick = function () {
+						if (searchInput) searchInput.value = "";
+						searchQuery = "";
+						currentFilter = "all";
+
+						window.history.replaceState(
+							{},
+							"",
+							window.location.pathname,
+						);
+
+						filterButtons.forEach((b) =>
+							b.classList.remove("active"),
+						);
+						const allFilterBtn = document.querySelector(
+							'[data-filter="all"]',
+						);
+						if (allFilterBtn) allFilterBtn.classList.add("active");
+
+						visibleCount = 5;
+						updateGridEngine();
+					};
+				}
+
 				if (loadMoreBtn) {
 					loadMoreBtn.onclick = function () {
 						visibleCount += 4;

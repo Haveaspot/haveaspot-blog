@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
@@ -17,6 +18,22 @@ const {
 	readTime,
 	category,
 } = Astro.props;
+
+// Related Posts Engine
+const allPosts = await getCollection("blog");
+const relatedPosts = allPosts
+	.filter((post) => post.data.title !== title)
+	.sort((a, b) => {
+		const aCatMatch = a.data.category === category ? 1 : 0;
+		const bCatMatch = b.data.category === category ? 1 : 0;
+
+		if (aCatMatch !== bCatMatch) {
+			return bCatMatch - aCatMatch;
+		}
+
+		return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+	})
+	.slice(0, 2);
 ---
 
 <html lang="en">
@@ -59,7 +76,6 @@ const {
 				margin-bottom: 0.5em;
 				color: rgb(var(--gray));
 				font-family: "Poppins", system-ui, sans-serif;
-				/* AMENDED: Removed font-weight: 500 to match the listing grid */
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -186,6 +202,108 @@ const {
 			.share-link svg {
 				width: 22px;
 				height: 22px;
+			}
+
+			/* Related Posts Grid Styling */
+			.related-posts-section {
+				margin-top: 4rem;
+				padding-top: 3rem;
+				border-top: 1px solid #e5e7eb;
+			}
+			.related-header-row {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 2rem;
+			}
+			.related-posts-title {
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 1.5rem;
+				font-weight: 600;
+				color: #021300;
+				margin: 0;
+			}
+
+			.view-related-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				background-color: transparent;
+				color: #021300;
+				border: 1px solid #e5e7eb;
+				padding: 6px 18px;
+				border-radius: 20px;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 14px;
+				font-weight: 500;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+			.view-related-btn:hover {
+				border-color: #0aad0a;
+				color: #0aad0a;
+			}
+			.view-related-btn svg {
+				width: 10px;
+				height: 10px;
+				transition: transform 0.2s ease;
+			}
+
+			.related-grid {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			.related-card {
+				width: calc(50% - 1rem);
+			}
+			.related-card a {
+				display: block;
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+			.related-card img {
+				margin-bottom: 0.5rem;
+				border-radius: 12px;
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				transition: box-shadow 0.2s ease;
+			}
+			.related-card .related-title {
+				margin: 0 0 0.4rem 0;
+				color: rgb(var(--black));
+				line-height: 1.2;
+				font-size: 1.35rem;
+				transition: color 0.2s ease;
+			}
+			.related-card a:hover .related-title {
+				color: rgb(var(--gray));
+			}
+			.related-card a:hover img {
+				box-shadow: var(--box-shadow);
+			}
+			.related-card .date {
+				justify-content: flex-start !important;
+			}
+
+			@media (max-width: 720px) {
+				.related-card {
+					width: 100%;
+				}
+				.related-card img {
+					height: auto;
+					aspect-ratio: 16/9;
+				}
+				.related-header-row {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 1rem;
+				}
 			}
 		</style>
 	</head>
@@ -348,7 +466,72 @@ const {
 						<h1>{title}</h1>
 						<hr />
 					</div>
+
 					<slot />
+
+					{
+						relatedPosts.length > 0 && (
+							<div class="related-posts-section">
+								<div class="related-header-row">
+									<h3 class="related-posts-title">
+										Related Articles
+									</h3>
+									<a
+										href={`/?filter=${encodeURIComponent(category || "Articles")}`}
+										class="view-related-btn"
+									>
+										More{" "}
+										{(category || "articles").toLowerCase()}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="3"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										>
+											<polyline points="9 18 15 12 9 6" />
+										</svg>
+									</a>
+								</div>
+
+								<ul class="related-grid">
+									{relatedPosts.map((post) => (
+										<li class="related-card">
+											<a href={`/blog/${post.id}/`}>
+												{post.data.heroImage && (
+													<Image
+														width={360}
+														height={180}
+														src={
+															post.data.heroImage
+														}
+														alt=""
+													/>
+												)}
+												<h4 class="related-title">
+													{post.data.title}
+												</h4>
+												<p class="date">
+													<FormattedDate
+														date={post.data.pubDate}
+													/>
+													<span class="separator">
+														|
+													</span>
+													<span>
+														{post.data.category ||
+															"Articles"}
+													</span>
+												</p>
+											</a>
+										</li>
+									))}
+								</ul>
+							</div>
+						)
+					}
 				</div>
 			</article>
 		</main>
