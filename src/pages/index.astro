@@ -20,6 +20,97 @@ const posts = (await getCollection("blog")).sort(
 			main {
 				width: 960px;
 			}
+
+			/* Filter Anchor Context Frame Wrapper */
+			.filter-menu-container {
+				position: relative;
+				display: inline-flex;
+				align-items: center;
+				margin-bottom: 3rem;
+			}
+
+			/* Left-aligned Filter Trigger Button */
+			.filter-trigger-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				background-color: transparent;
+				color: #021300;
+				border: 1px solid #e5e7eb;
+				padding: 6px 18px;
+				border-radius: 20px;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 14px;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				user-select: none;
+				z-index: 95;
+			}
+			.filter-trigger-btn:hover,
+			.filter-trigger-btn.active {
+				border-color: #0aad0a;
+				color: #0aad0a;
+			}
+			.filter-trigger-btn svg {
+				width: 10px;
+				height: 10px;
+				transition: transform 0.2s ease;
+			}
+			/* Rotates the chevron down when active */
+			.filter-trigger-btn.active svg {
+				transform: rotate(90deg);
+			}
+
+			/* Absolute-positioned Floating Pill Strip Panel (Preserved for Mobile) */
+			.filter-dropdown-strip {
+				position: absolute;
+				top: 50%;
+				left: calc(100% + 0.6rem);
+				background-color: #ffffff;
+				border: 1px solid #e5e7eb;
+				border-radius: 30px;
+				padding: 4px 6px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 0.35rem;
+				box-shadow: var(--box-shadow);
+				z-index: 90;
+				opacity: 0;
+				pointer-events: none;
+				transform: translate(-10px, -50%);
+				transition:
+					opacity 0.2s ease,
+					transform 0.2s ease;
+			}
+			.filter-dropdown-strip.open {
+				opacity: 1;
+				pointer-events: auto;
+				transform: translate(0, -50%);
+			}
+
+			.filter-btn {
+				background-color: transparent;
+				color: #021300;
+				border: 1px solid transparent;
+				padding: 4px 14px;
+				border-radius: 15px;
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 13px;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				white-space: nowrap;
+			}
+			.filter-btn:hover {
+				color: #0aad0a;
+			}
+			.filter-btn.active {
+				background-color: #021300;
+				color: #ffffff;
+			}
+
 			ul {
 				display: flex;
 				flex-wrap: wrap;
@@ -30,25 +121,34 @@ const posts = (await getCollection("blog")).sort(
 			}
 			ul li {
 				width: calc(50% - 1rem);
+				transition: opacity 0.3s ease;
 			}
 			ul li * {
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
+
+			/* Featured Dynamic Post Styling */
+			ul li.is-featured {
+				width: 100% !important;
+				margin-bottom: 1rem !important;
+				text-align: center !important;
 			}
-			ul li:first-child img {
-				width: 100%;
+			ul li.is-featured img {
+				width: 100% !important;
+				height: 360px !important;
+				object-fit: cover !important;
 			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+			ul li.is-featured .title {
+				font-size: 2.369rem !important;
 			}
+
 			ul li img {
 				margin-bottom: 0.5rem;
 				border-radius: 12px;
+				width: 100%;
+				height: 240px;
+				object-fit: cover;
 			}
 			ul li a {
 				display: block;
@@ -61,27 +161,26 @@ const posts = (await getCollection("blog")).sort(
 			.date {
 				margin: 0;
 				color: rgb(var(--gray));
+				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 14px;
 			}
 			ul li a:hover h4 {
-				color: var(--accent);
+				color: #0aad0a;
 			}
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
 
-			/* Utility class to hide overflow posts initially */
 			.post-hidden {
 				display: none !important;
 			}
 
-			/* Load More Button Styling */
 			.load-more-wrapper {
 				display: flex;
 				justify-content: center;
 				margin-top: 4rem;
 				width: 100%;
 			}
-
 			.btn-load-more {
 				background-color: #021300;
 				color: #ffffff;
@@ -94,7 +193,6 @@ const posts = (await getCollection("blog")).sort(
 				cursor: pointer;
 				transition: background-color 0.2s ease;
 			}
-
 			.btn-load-more:hover {
 				background-color: #0aad0a;
 			}
@@ -107,12 +205,10 @@ const posts = (await getCollection("blog")).sort(
 					width: 100%;
 					text-align: center;
 				}
-				ul li:first-child {
-					margin-bottom: 0;
+				ul li.is-featured .title {
+					font-size: 1.563em !important;
 				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+				/* AMENDED: Removed layout-breaking mobile block overrides so the pill floats elegantly to the right */
 			}
 		</style>
 	</head>
@@ -120,12 +216,52 @@ const posts = (await getCollection("blog")).sort(
 		<Header />
 		<main>
 			<section>
+				<div class="filter-menu-container" id="filter-menu-frame">
+					<button
+						id="filter-menu-trigger"
+						class="filter-trigger-btn"
+						aria-haspopup="true"
+						aria-expanded="false"
+					>
+						Filter
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="3"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</button>
+
+					<div id="filter-dropdown" class="filter-dropdown-strip">
+						<button class="filter-btn active" data-filter="all"
+							>All</button
+						>
+						<button class="filter-btn" data-filter="Articles"
+							>Articles</button
+						>
+						<button class="filter-btn" data-filter="Company News"
+							>Company News</button
+						>
+					</div>
+				</div>
+
 				<ul id="blog-grid">
 					{
 						posts.map((post, index) => (
-							/* Adds the 'post-hidden' class to any post starting at index 5 (the 6th post) */
-							<li class={index >= 5 ? "post-hidden" : ""}>
-								<a href={`/blog/${post.slug || post.id}/`}>
+							<li
+								class={
+									index === 0
+										? "blog-post-card is-featured"
+										: "blog-post-card"
+								}
+								data-category={post.data.category || "Articles"}
+							>
+								<a href={`/blog/${post.id}/`}>
 									{post.data.heroImage && (
 										<Image
 											width={720}
@@ -139,6 +275,12 @@ const posts = (await getCollection("blog")).sort(
 										<FormattedDate
 											date={post.data.pubDate}
 										/>
+										<span style="margin: 0 0.4rem; color: #e5e7eb;">
+											|
+										</span>
+										<span>
+											{post.data.category || "Articles"}
+										</span>
 									</p>
 								</a>
 							</li>
@@ -146,58 +288,119 @@ const posts = (await getCollection("blog")).sort(
 					}
 				</ul>
 
-				{
-					/* Only render the button container if there are more than 5 posts in total */
-				}
-				{
-					posts.length > 5 && (
-						<div class="load-more-wrapper" id="load-more-wrapper">
-							<button id="load-more-btn" class="btn-load-more">
-								Load More
-							</button>
-						</div>
-					)
-				}
+				<div class="load-more-wrapper" id="load-more-wrapper">
+					<button id="load-more-btn" class="btn-load-more"
+						>Load More</button
+					>
+				</div>
 			</section>
 		</main>
 		<Footer />
 
 		<script is:inline>
-			function initLoadMore() {
-				const loadMoreBtn = document.getElementById("load-more-btn");
-				const wrapper = document.getElementById("load-more-wrapper");
+			let currentFilter = "all";
+			let visibleCount = 5;
 
-				if (!loadMoreBtn) return;
+			function updateGridEngine() {
+				const posts = document.querySelectorAll(".blog-post-card");
+				const loadMoreBtnWrapper =
+					document.getElementById("load-more-wrapper");
 
-				loadMoreBtn.onclick = function () {
-					// Find all posts that are currently hidden
-					const hiddenPosts =
-						document.querySelectorAll(".post-hidden");
-					const batchSize = 4;
+				let matchingPosts = [];
+				posts.forEach((post) => {
+					const postCategory =
+						post.getAttribute("data-category") || "Articles";
 
-					// Loop through and reveal up to 4 posts
-					for (
-						let i = 0;
-						i < batchSize && i < hiddenPosts.length;
-						i++
+					if (
+						currentFilter === "all" ||
+						postCategory === currentFilter
 					) {
-						hiddenPosts[i].classList.remove("post-hidden");
+						matchingPosts.push(post);
+						post.classList.remove("post-hidden");
+					} else {
+						post.classList.add("post-hidden");
+						post.classList.remove("is-featured");
+					}
+				});
+
+				matchingPosts.forEach((post, index) => {
+					if (index === 0) {
+						post.classList.add("is-featured");
+					} else {
+						post.classList.remove("is-featured");
 					}
 
-					// Check if we just revealed the very last posts. If so, hide the button wrapper
-					const remainingHidden =
-						document.querySelectorAll(".post-hidden");
-					if (remainingHidden.length === 0) {
-						wrapper.style.display = "none";
+					if (index >= visibleCount) {
+						post.classList.add("post-hidden");
 					}
-				};
+				});
+
+				if (loadMoreBtnWrapper) {
+					if (matchingPosts.length <= visibleCount) {
+						loadMoreBtnWrapper.style.display = "none";
+					} else {
+						loadMoreBtnWrapper.style.display = "flex";
+					}
+				}
 			}
 
-			// Run on initial page load
-			initLoadMore();
+			function initListingEngine() {
+				const container = document.getElementById("filter-menu-frame");
+				const trigger = document.getElementById("filter-menu-trigger");
+				const dropdown = document.getElementById("filter-dropdown");
+				const filterButtons = document.querySelectorAll(".filter-btn");
+				const loadMoreBtn = document.getElementById("load-more-btn");
 
-			// Run after Astro View Transitions (if enabled)
-			document.addEventListener("astro:page-load", initLoadMore);
+				if (!trigger || !dropdown || !container) return;
+
+				// 1. Toggle Filter Dropdown Menu
+				trigger.onclick = function (e) {
+					e.stopPropagation();
+					const isOpen = dropdown.classList.toggle("open");
+					trigger.classList.toggle("active", isOpen);
+					trigger.setAttribute(
+						"aria-expanded",
+						isOpen ? "true" : "false",
+					);
+				};
+
+				// 2. Click Outside/Away Close Routine
+				document.onclick = function (e) {
+					if (!container.contains(e.target)) {
+						dropdown.classList.remove("open");
+						trigger.classList.remove("active");
+						trigger.setAttribute("aria-expanded", "false");
+					}
+				};
+
+				// 3. Category Filter Selection Updates
+				filterButtons.forEach((btn) => {
+					btn.onclick = function (e) {
+						e.stopPropagation();
+						filterButtons.forEach((b) =>
+							b.classList.remove("active"),
+						);
+						this.classList.add("active");
+
+						currentFilter = this.getAttribute("data-filter");
+						visibleCount = 5;
+						updateGridEngine();
+					};
+				});
+
+				// 4. Pagination Load More Routing
+				if (loadMoreBtn) {
+					loadMoreBtn.onclick = function () {
+						visibleCount += 4;
+						updateGridEngine();
+					};
+				}
+
+				updateGridEngine();
+			}
+
+			initListingEngine();
+			document.addEventListener("astro:page-load", initListingEngine);
 		</script>
 	</body>
 </html>

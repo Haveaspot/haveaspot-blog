@@ -141,6 +141,19 @@ const links = {
 </footer>
 
 <style is:global>
+	/* NEW: Forces the page into a flex column, allowing the main tag to expand */
+	body {
+		display: flex !important;
+		flex-direction: column !important;
+		min-height: 100vh !important;
+		margin: 0 !important;
+	}
+
+	/* NEW: Forces the content area to grow and take up all empty vertical space */
+	main {
+		flex: 1 0 auto !important;
+	}
+
 	/* Base Footer Outer Frame */
 	.has-footer {
 		width: 100% !important;
@@ -151,7 +164,8 @@ const links = {
 		padding-top: 4rem !important;
 		margin-top: 4rem !important;
 		display: block !important;
-		clear: both !important;
+		/* NEW: Prevents the footer from squishing if the page gets crowded */
+		flex-shrink: 0 !important;
 	}
 
 	/* Core Content Alignment Flex Container */
@@ -161,10 +175,8 @@ const links = {
 		justify-content: space-between !important;
 		align-items: flex-start !important;
 		width: 100% !important;
-		/* FIXED: Updated width to match header */
 		max-width: 1536px !important;
 		margin: 0 auto !important;
-		/* FIXED: Updated side padding to 1rem to match header */
 		padding: 0 1rem 3rem 1rem !important;
 		box-sizing: border-box !important;
 	}
@@ -270,10 +282,8 @@ const links = {
 	.footer-bottom {
 		border-top: 1px solid #e5e7eb !important;
 		width: 100% !important;
-		/* FIXED: Updated width to match header */
 		max-width: 1536px !important;
 		margin: 0 auto !important;
-		/* FIXED: Updated side padding to 1rem to match header */
 		padding: 2rem 1rem !important;
 		box-sizing: border-box !important;
 		font-size: 0.85rem !important;

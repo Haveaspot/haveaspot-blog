@@ -144,8 +144,6 @@ const urls = {
 		border-bottom: 1px solid #e5e7eb !important;
 		font-family: "Poppins", system-ui, sans-serif !important;
 		display: block !important;
-
-		/* FIXED: Made the header sticky */
 		position: sticky !important;
 		top: 0 !important;
 		z-index: 100 !important;
@@ -163,7 +161,6 @@ const urls = {
 		box-sizing: border-box !important;
 	}
 
-	/* Desktop Logo Styling */
 	.has-logo-link {
 		display: flex !important;
 		align-items: center !important;
@@ -181,7 +178,6 @@ const urls = {
 		overflow: visible !important;
 	}
 
-	/* Standard Desktop Nav Elements */
 	.has-nav {
 		display: flex !important;
 		flex-direction: row !important;
@@ -246,7 +242,6 @@ const urls = {
 		color: #0aad0a !important;
 	}
 
-	/* Auth Buttons */
 	.auth-cluster {
 		display: flex !important;
 		flex-direction: row !important;
@@ -288,7 +283,6 @@ const urls = {
 		background-color: #0e491f !important;
 	}
 
-	/* HIDDEN DESKTOP ELEMENTS */
 	.mobile-toggle,
 	.mobile-login-link,
 	.mobile-overlay,
@@ -300,7 +294,6 @@ const urls = {
        MOBILE OVERRIDES
        ========================================== */
 	@media (max-width: 1024px) {
-		/* Activate 3-Point Mobile Header Flow */
 		.mobile-toggle {
 			display: flex !important;
 			background: transparent !important;
@@ -329,7 +322,6 @@ const urls = {
 			display: none !important;
 		}
 
-		/* Darkened Background Overlay */
 		.mobile-overlay {
 			display: block !important;
 			position: fixed !important;
@@ -349,30 +341,35 @@ const urls = {
 			pointer-events: auto !important;
 		}
 
-		/* Off-Canvas Mobile Drawer */
+		/* Off-Canvas Mobile Drawer Settings */
 		.has-nav {
 			position: fixed !important;
 			top: 0 !important;
-			left: -100% !important; /* Starts hidden off-screen */
+			left: -100% !important;
 			width: 85% !important;
 			max-width: 340px !important;
-			height: 100% !important;
+
+			/* AMENDED: Upgraded from 100% to 100dvh to lock to current mobile dimensions */
+			height: 100dvh !important;
+			box-sizing: border-box !important;
+
 			background-color: #ffffff !important;
 			flex-direction: column !important;
 			align-items: stretch !important;
-			padding: 1.5rem !important;
+
+			/* AMENDED: Increased bottom padding room to clear system home indicators */
+			padding: 1.5rem 1.5rem 3rem 1.5rem !important;
+
 			z-index: 1000 !important;
 			overflow-y: auto !important;
 			transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 			box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1) !important;
 		}
 
-		/* Drawer Slides In */
 		.has-nav.open {
 			left: 0 !important;
 		}
 
-		/* Drawer Header (Menu & Close Icon) */
 		.mobile-drawer-header {
 			display: flex !important;
 			justify-content: space-between !important;
@@ -402,7 +399,6 @@ const urls = {
 			color: #021300 !important;
 		}
 
-		/* Drawer Inner Elements Layout */
 		.nav-links {
 			flex-direction: column !important;
 			width: 100% !important;
@@ -433,12 +429,15 @@ const urls = {
 			border-top: 1px solid #e5e7eb !important;
 		}
 
+		/* Auth Cluster Panel */
 		.auth-cluster {
 			flex-direction: column !important;
 			width: 100% !important;
 			gap: 0.75rem !important;
-			margin-top: auto !important; /* Pushes buttons to the bottom if space allows */
+			margin-top: auto !important;
 			padding-top: 2rem !important;
+			/* AMENDED: Ensures internal content behaves predictably within layout bounds */
+			flex-shrink: 0 !important;
 		}
 
 		.btn-secondary,
@@ -450,13 +449,12 @@ const urls = {
 		}
 
 		.btn-secondary {
-			border: 1px solid #e5e7eb !important; /* Added border for better mobile visibility */
+			border: 1px solid #e5e7eb !important;
 		}
 	}
 </style>
 
 <script is:inline>
-	// Define the toggle function globally so it works consistently
 	function toggleMobileMenu() {
 		const nav = document.getElementById("mobile-nav");
 		const overlay = document.getElementById("mobile-overlay");
@@ -465,7 +463,6 @@ const urls = {
 			nav.classList.toggle("open");
 			overlay.classList.toggle("open");
 
-			// Lock background scrolling when open
 			if (nav.classList.contains("open")) {
 				document.body.style.overflow = "hidden";
 			} else {
@@ -479,15 +476,11 @@ const urls = {
 		const closeBtn = document.getElementById("mobile-close-btn");
 		const overlay = document.getElementById("mobile-overlay");
 
-		// Using direct assignment overwrites any old listeners to prevent bugs during navigation
 		if (btn) btn.onclick = toggleMobileMenu;
 		if (closeBtn) closeBtn.onclick = toggleMobileMenu;
 		if (overlay) overlay.onclick = toggleMobileMenu;
 	}
 
-	// Run on initial page load
 	initHeader();
-
-	// Run after Astro View Transitions load a new page
 	document.addEventListener("astro:page-load", initHeader);
 </script>
