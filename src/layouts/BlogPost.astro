@@ -265,7 +265,9 @@ const relatedPosts = allPosts
 				width: calc(50% - 1rem);
 			}
 			.related-card a {
-				display: block;
+				display: flex;
+				flex-direction: column;
+				height: 100%;
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
@@ -283,6 +285,7 @@ const relatedPosts = allPosts
 				line-height: 1.2;
 				font-size: 1.35rem;
 				transition: color 0.2s ease;
+				flex: 1;
 			}
 			.related-card a:hover .related-title {
 				color: rgb(var(--gray));
@@ -292,6 +295,8 @@ const relatedPosts = allPosts
 			}
 			.related-card .date {
 				justify-content: flex-start !important;
+				font-size: 14px;
+				font-weight: 400;
 			}
 
 			@media (max-width: 720px) {

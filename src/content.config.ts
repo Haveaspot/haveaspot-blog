@@ -2,7 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
-	loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/blog" }),
+	loader: glob({ pattern: '**/[^_.]*{md,mdx}', base: "./src/content/blog" }),
 
 	// AMENDED: Changed schema to a function so we can extract the native `image` helper
 	schema: ({ image }) => z.object({
