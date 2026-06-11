@@ -2,19 +2,20 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
-	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
+	loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/blog" }),
 
-	// FIXED: Changed to a function to access the native v6 image optimizer
+	// AMENDED: Changed schema to a function so we can extract the native `image` helper
 	schema: ({ image }) => z.object({
 		title: z.string(),
 		description: z.string(),
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 
-		// FIXED: Uses image() instead of z.string() to safely resolve relative paths
+		// AMENDED: Swapped z.string() out for image() to automatically resolve local filepaths
 		heroImage: image().optional(),
 
-		category: z.enum(['Articles', 'Company News']).optional().default('Articles'),
+		readTime: z.string().optional(),
+		category: z.enum(['Articles', 'Company News', 'Guides for Bookers', 'Guides for Venues']).optional(),
 	}),
 });
 

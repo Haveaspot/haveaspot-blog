@@ -103,23 +103,26 @@ const relatedPosts = allPosts
 			.back-btn {
 				display: inline-flex;
 				align-items: center;
-				gap: 0.5rem;
+				gap: 0.4rem;
+				background-color: transparent;
 				color: #021300;
-				text-decoration: none;
+				border: 1px solid #e5e7eb;
+				padding: 6px 18px;
+				border-radius: 20px;
 				font-family: "Poppins", system-ui, sans-serif;
+				font-size: 14px;
 				font-weight: 500;
-				font-size: 15px;
-				transition: color 0.2s ease;
+				text-decoration: none;
+				transition: all 0.2s ease;
+				user-select: none;
 			}
 			.back-btn:hover {
+				border-color: #0aad0a;
 				color: #0aad0a;
 			}
-			.back-btn:hover svg {
-				transform: translateX(-3px);
-			}
 			.back-btn svg {
-				width: 20px;
-				height: 20px;
+				width: 10px;
+				height: 10px;
 				transition: transform 0.2s ease;
 			}
 
@@ -319,12 +322,11 @@ const relatedPosts = allPosts
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
-							stroke-width="2"
+							stroke-width="3"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						>
-							<line x1="19" y1="12" x2="5" y2="12"></line>
-							<polyline points="12 19 5 12 12 5"></polyline>
+							<polyline points="15 18 9 12 15 6"></polyline>
 						</svg>
 						Back to Blog
 					</a>

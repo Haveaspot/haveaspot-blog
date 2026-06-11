@@ -77,7 +77,9 @@ const posts = (await getCollection("blog")).sort(
 				background-color: #ffffff;
 				border: 1px solid #e5e7eb;
 				border-radius: 30px;
-				padding: 4px 6px;
+				/* Right padding removed — last-child margin handles trailing
+				   gap so both ends of the scroll area are exactly equal */
+				padding: 4px 0 4px 8px;
 				display: flex;
 				flex-direction: row;
 				align-items: center;
@@ -90,7 +92,24 @@ const posts = (await getCollection("blog")).sort(
 				transition:
 					opacity 0.2s ease,
 					transform 0.2s ease;
+
+				width: min(360px, calc(100vw - 150px));
+				overflow-x: auto;
+				white-space: nowrap;
+				scrollbar-width: none;
 			}
+
+			/* Hides scrollbar on Chrome, Safari, and Edge */
+			.filter-dropdown-strip::-webkit-scrollbar {
+				display: none;
+			}
+
+			/* Trailing gap: matches the 8px padding-left on the strip */
+			.filter-dropdown-strip .filter-btn:last-child {
+				margin-right: 8px;
+			}
+
+			/* FIX: Open state for the filter dropdown */
 			.filter-dropdown-strip.open {
 				opacity: 1;
 				pointer-events: auto;
@@ -98,7 +117,7 @@ const posts = (await getCollection("blog")).sort(
 			}
 
 			.filter-btn {
-				background-color: transparent;
+				background-color: #f2f2f2;
 				color: #021300;
 				border: 1px solid transparent;
 				padding: 4px 14px;
@@ -109,6 +128,8 @@ const posts = (await getCollection("blog")).sort(
 				cursor: pointer;
 				transition: all 0.2s ease;
 				white-space: nowrap;
+				display: inline-block;
+				flex-shrink: 0;
 			}
 			.filter-btn:hover {
 				color: #0aad0a;
@@ -285,6 +306,7 @@ const posts = (await getCollection("blog")).sort(
 					font-size: 1.563em !important;
 				}
 				.controls-row {
+					position: relative;
 					flex-direction: column;
 					align-items: flex-start;
 					gap: 1rem;
@@ -292,6 +314,27 @@ const posts = (await getCollection("blog")).sort(
 				}
 				.search-wrapper {
 					max-width: 100%;
+				}
+				/* Keep dropdown inline with the filter button row but
+				   stretch its right edge to the right edge of the controls-row */
+				.filter-menu-container {
+					position: static;
+				}
+				.filter-dropdown-strip {
+					position: absolute;
+					top: 17px;
+					left: calc(5.5rem + 0.6rem);
+					right: 0;
+					width: auto;
+					transform: translate(10px, -50%);
+					transition:
+						opacity 0.2s ease,
+						transform 0.2s ease;
+				}
+				.filter-dropdown-strip.open {
+					transform: translate(0, -50%);
+					opacity: 1;
+					pointer-events: auto;
 				}
 			}
 		</style>
@@ -332,6 +375,16 @@ const posts = (await getCollection("blog")).sort(
 							<button
 								class="filter-btn"
 								data-filter="Company News">Company News</button
+							>
+							<button
+								class="filter-btn"
+								data-filter="Guides for Bookers"
+								>Guides for Bookers</button
+							>
+							<button
+								class="filter-btn"
+								data-filter="Guides for Venues"
+								>Guides for Venues</button
 							>
 						</div>
 					</div>
@@ -492,12 +545,10 @@ const posts = (await getCollection("blog")).sort(
 
 				if (!trigger || !dropdown || !container) return;
 
-				// NEW: Read the URL to see if a category was passed in
 				const urlParams = new URLSearchParams(window.location.search);
 				const filterParam = urlParams.get("filter");
 				if (filterParam) {
 					currentFilter = filterParam;
-					// Automatically click the corresponding filter button visually
 					filterButtons.forEach((b) => b.classList.remove("active"));
 					const targetBtn = document.querySelector(
 						`[data-filter="${filterParam}"]`,
@@ -536,7 +587,6 @@ const posts = (await getCollection("blog")).sort(
 						currentFilter = this.getAttribute("data-filter");
 						visibleCount = 5;
 
-						// Clear the URL parameter so it doesn't get stuck if they click a new filter
 						window.history.replaceState(
 							{},
 							"",
