@@ -140,6 +140,10 @@ img {
 	border-radius: 8px;
 }
 
+.has-logo-img {
+	border-radius: 0 !important;
+}
+
 code {
 	padding: 2px 5px;
 	background-color: rgb(var(--gray-light));
@@ -171,7 +175,7 @@ hr {
 
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 16px;
 	}
 
 	main {
