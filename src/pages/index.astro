@@ -229,11 +229,17 @@ const posts = (await getCollection("blog")).sort(
 				margin-bottom: 1rem !important;
 				text-align: center !important;
 			}
+			ul li.is-featured a {
+				display: block !important;
+				width: 100% !important;
+			}
 			ul li.is-featured img {
+				display: block !important;
 				width: 100% !important;
 				height: 360px !important;
 				object-fit: cover !important;
 				box-sizing: border-box !important;
+				margin: 0 !important;
 			}
 			ul li.is-featured .title {
 				font-size: 2.369rem !important;
