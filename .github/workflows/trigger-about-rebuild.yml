@@ -1,0 +1,13 @@
+name: Trigger About Site Rebuild
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call About site deploy hook
+        run: curl -X POST "${{ secrets.VERCEL_ABOUT_DEPLOY_HOOK }}"
