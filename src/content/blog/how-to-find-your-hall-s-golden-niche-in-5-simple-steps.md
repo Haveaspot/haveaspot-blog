@@ -2,7 +2,7 @@
 title: 'How to Find Your Hall''s ''Golden Niche'' in 5 Simple Steps'
 description: 'Is your village hall calendar looking a little empty?'
 pubDate: 'Jun 25 2025'
-heroImage: '../../assets/Golden-Niche.webp'
+heroImage: '../../assets/Golden-Niche.png'
 category: 'Articles'
 ---
 
