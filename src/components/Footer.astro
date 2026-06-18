@@ -12,10 +12,10 @@ const links = {
 	home: "https://haveaspot.com/",
 	venues: "https://haveaspot.com/venues",
 	hosts: "https://haveaspot.com/hosts",
-	about: "/about",
-	blog: "/blog",
+	about: "https://about.haveaspot.com",
+	blog: "https://blog.haveaspot.com",
 	support: "https://support.haveaspot.com",
-	contact: "/contact",
+	contact: "https://about.haveaspot.com/contact",
 	login: "https://haveaspot.com/login",
 
 	// Contact & Socials
@@ -24,10 +24,10 @@ const links = {
 	linkedin: "https://www.linkedin.com/company/haveaspot",
 
 	// Legal Links
-	termsOfUse: "/website-terms-of-use",
-	privacyPolicy: "/platform-privacy-policy",
-	venueAgreement: "/venue-service-agreement",
-	bookerAgreement: "/booker-service-agreement",
+	termsOfUse: "https://about.haveaspot.com/legal/website-terms-of-use",
+	privacyPolicy: "https://about.haveaspot.com/legal/privacy-policy",
+	venueAgreement: "https://about.haveaspot.com/legal/venue-service-agreement",
+	bookerAgreement: "https://about.haveaspot.com/legal/booker-terms-of-service",
 
 	// Corporate Info
 	vatNumber: "GB 123 4567 89",
@@ -116,13 +116,13 @@ const links = {
 
 	<div class="footer-bottom">
 		<div class="footer-legal-links">
-			<a href={links.termsOfUse}>Website Terms of Use</a>
+			<a href={links.termsOfUse} target="_blank" rel="noopener noreferrer">Website Terms of Use</a>
 			<span class="legal-separator">|</span>
-			<a href={links.privacyPolicy}>Platform Privacy Policy</a>
+			<a href={links.privacyPolicy} target="_blank" rel="noopener noreferrer">Platform Privacy Policy</a>
 			<span class="legal-separator">|</span>
-			<a href={links.venueAgreement}>Venue Service Agreement</a>
+			<a href={links.venueAgreement} target="_blank" rel="noopener noreferrer">Venue Service Agreement</a>
 			<span class="legal-separator">|</span>
-			<a href={links.bookerAgreement}>Booker Service Agreement</a>
+			<a href={links.bookerAgreement} target="_blank" rel="noopener noreferrer">Booker Service Agreement</a>
 		</div>
 
 		<div class="footer-bottom-content">
@@ -238,7 +238,7 @@ const links = {
 	}
 
 	.footer-socials a:hover {
-		color: var(--accent) !important;
+		color: #0AAD0A !important;
 		transform: translateY(-2px) !important;
 	}
 
@@ -314,7 +314,7 @@ const links = {
 	}
 
 	.footer-legal-links a:hover {
-		color: var(--accent) !important;
+		color: #0AAD0A !important;
 	}
 
 	.legal-separator {
@@ -344,7 +344,7 @@ const links = {
 	/* Standard Interactive Hovers */
 	.footer-col nav a:hover,
 	.contact-col a:hover {
-		color: var(--accent) !important;
+		color: #0AAD0A !important;
 	}
 
 	/* Mobile Responsive Adjustments */
