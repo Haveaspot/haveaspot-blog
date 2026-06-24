@@ -26,10 +26,10 @@ body {
 	padding: 0;
 	text-align: left;
 	background-color: #ffffff;
-	/* FIXED: Changed from #fafafa to pure white */
 	color: rgb(var(--black));
 	word-wrap: break-word;
 	overflow-wrap: break-word;
+	line-height: 1.625;
 }
 
 /* Ensures any SVG icons in the main body inherit the dark color */
@@ -54,6 +54,11 @@ h6 {
 	color: rgb(var(--black));
 	line-height: 1.2;
 	font-weight: 700;
+}
+
+h1,
+h2 {
+	font-weight: 800;
 }
 
 h1 {
@@ -82,9 +87,8 @@ b {
 	color: rgb(var(--black));
 }
 
-/* Links default to green */
 a {
-	color: var(--accent);
+	color: #021300;
 	text-decoration: none;
 	transition: color 0.2s ease;
 }
@@ -137,7 +141,7 @@ table {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
+	border-radius: 12px;
 }
 
 .has-logo-img {
